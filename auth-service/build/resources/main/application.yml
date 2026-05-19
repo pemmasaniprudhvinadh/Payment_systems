@@ -1,0 +1,21 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/payment_db
+    username: payment_user
+    password: payment_pass
+  redis:
+    host: localhost
+    port: 6379
+  kafka:
+    bootstrap-servers: localhost:9092
+jwt:
+  secret: change-me-to-a-secure-random-value
+  expiration-ms: 3600000
+
+# JPA settings for local development
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

@@ -1,0 +1,11 @@
+{
+  "java.import.gradle.enabled": true,
+  "java.import.gradle.wrapper.enabled": true,
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-21",
+      "path": "${env:JAVA_HOME}"
+    }
+  ],
+  "java.errors.incompleteClasspath.severity": "warning"
+}

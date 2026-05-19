@@ -1,0 +1,19 @@
+plugins {
+    id 'org.springframework.boot'
+    id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+dependencies {
+    // Import Spring Cloud BOM via Gradle platform
+    implementation platform('org.springframework.cloud:spring-cloud-dependencies:2022.0.3')
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    // Ensure a modern Gson is used (override old transitive gson 2.1)
+    implementation 'com.google.code.gson:gson:2.10.1'
+}
+
+// Use root project Java compile options (no toolchain auto-provisioning)

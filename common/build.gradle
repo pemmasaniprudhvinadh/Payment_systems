@@ -1,0 +1,12 @@
+plugins {
+    id 'java-library'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+dependencies {
+    // `common` contains simple POJOs used across services; no external runtime deps required.
+}
+
+// Use root project Java compile options (no toolchain auto-provisioning)

@@ -1,0 +1,25 @@
+plugins {
+    id 'org.springframework.boot' version '3.1.2' apply false
+    id 'io.spring.dependency-management' version '1.1.0' apply false
+}
+
+allprojects {
+    group = 'com.example'
+    version = '0.0.1-SNAPSHOT'
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    // Configure Java settings only when the Java plugin is present
+    plugins.withType(org.gradle.api.plugins.JavaPlugin) {
+        tasks.withType(JavaCompile) {
+            options.encoding = 'UTF-8'
+            options.release = 21
+        }
+    }
+
+    // Do not apply the Spring dependency-management plugin here (incompatible with Gradle 9).
+    // Modules that need Spring Cloud will import the BOM using Gradle platforms instead.
+}

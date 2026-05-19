@@ -1,0 +1,20 @@
+plugins {
+    id 'org.springframework.boot'
+    id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+dependencies {
+    // Import Spring Boot BOM so starters resolve to the correct versions
+    implementation platform('org.springframework.boot:spring-boot-dependencies:3.1.2')
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'org.postgresql:postgresql'
+
+    implementation project(':common')
+}
+
+// Use root project Java compile options (no toolchain auto-provisioning)
