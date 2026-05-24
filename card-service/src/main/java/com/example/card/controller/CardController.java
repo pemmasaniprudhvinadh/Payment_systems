@@ -71,4 +71,38 @@ public class CardController {
         cardService.deleteCard(id);
         return ResponseEntity.noContent().build();
     }
+
+    /**
+     * Tokenize a card for secure payment processing
+     * Request body: {"userId": "user123", "cardNumber": "4532-1234-5678-9010", "expiryDate": "12/25", "cvv": "123"}
+     * Response: {"token": "token_xyz123", "last4": "9010"}
+     */
+    @PostMapping("/tokenize")
+    public ResponseEntity<?> tokenizeCard(@RequestBody Map<String, String> body) {
+        try {
+            String userId = body.get("userId");
+            String cardNumber = body.get("cardNumber");
+            String expiryDate = body.get("expiryDate");
+            String cvv = body.get("cvv");
+
+            if (userId == null || cardNumber == null) {
+                return ResponseEntity.badRequest().body(Map.of("error", "userId and cardNumber are required"));
+            }
+
+            // Tokenize the card (sensitive data not stored)
+            String token = cardService.tokenizeCard(userId, cardNumber, expiryDate, cvv);
+            String last4 = cardNumber.replaceAll("[^0-9]", "");
+            if (last4.length() > 4) {
+                last4 = last4.substring(last4.length() - 4);
+            }
+
+            return ResponseEntity.ok(Map.of(
+                "token", token,
+                "last4", last4,
+                "message", "Card tokenized successfully. Use the token for payments."
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
 }

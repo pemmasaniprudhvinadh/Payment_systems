@@ -41,8 +41,41 @@ public class CardService {
         repository.deleteById(id);
     }
 
+    /**
+     * Tokenize card data for secure payment processing
+     * Raw card data is NOT stored - only a token is generated
+     * In production, integrate with a Payment Processor (Stripe, Square, etc.)
+     */
+    public String tokenizeCard(String userId, String cardNumber, String expiryDate, String cvv) {
+        // Validate card data
+        if (cardNumber == null || cardNumber.isEmpty()) {
+            throw new IllegalArgumentException("Card number is required");
+        }
+
+        // In production: send to payment processor (Stripe, Square, etc.) and get token back
+        // For now, generate a secure token without storing sensitive data
+        String token = generateSecureToken(userId, cardNumber);
+
+        // Log masked card info (for audit purposes only)
+        String masked = mask(cardNumber);
+        System.out.println("Card tokenized for user " + userId + " - masked: " + masked);
+
+        return token;
+    }
+
+    /**
+     * Generate a secure token for the card (simulates payment processor tokenization)
+     * In production, this would call Stripe, Square, or similar
+     */
+    private String generateSecureToken(String userId, String cardNumber) {
+        // Create a hash of the card number + user ID + random salt
+        // This simulates what a payment processor would do
+        String hash = Integer.toHexString((userId + cardNumber + System.nanoTime()).hashCode());
+        return "token_" + hash + "_" + UUID.randomUUID().toString().substring(0, 8);
+    }
+
     private String mask(String number) {
         if (number == null || number.length() < 4) return "****";
-        return "**** **** **** " + number.substring(number.length()-4);
+        return "**** **** **** " + number.replaceAll("[^0-9]", "").substring(Math.max(0, number.length() - 4));
     }
 }
