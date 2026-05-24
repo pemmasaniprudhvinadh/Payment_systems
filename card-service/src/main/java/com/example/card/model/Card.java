@@ -3,9 +3,11 @@ package com.example.card.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.springframework.data.redis.core.RedisHash;
 
 @Entity
 @Table(name = "cards")
+@RedisHash("cards")
 public class Card {
 
     @Id
