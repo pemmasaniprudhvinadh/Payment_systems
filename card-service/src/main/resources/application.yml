@@ -8,6 +8,11 @@ spring:
   redis:
     host: localhost
     port: 6379
+  # Disable automatic Redis repository scanning to avoid conflicts with JPA
+  data:
+    redis:
+      repositories:
+        enabled: false
   kafka:
     bootstrap-servers: localhost:9092
 
