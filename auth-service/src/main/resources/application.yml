@@ -10,12 +10,64 @@ spring:
     port: 6379
   kafka:
     bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: auth-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
 jwt:
   secret: change-me-to-a-secure-random-value
   expiration-ms: 3600000
 
-# JPA settings for local development
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+# Circuit Breaker Configuration
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        failureRateThreshold: 50
+    instances:
+      authorizationCircuitBreaker:
+        baseConfig: default
+        waitDurationInOpenState: 10s
+
+  retry:
+    configs:
+      default:
+        maxAttempts: 3
+        waitDuration: 1000
+    instances:
+      authorizationRetry:
+        baseConfig: default
+        maxAttempts: 2
+
+  timelimiter:
+    configs:
+      default:
+        cancelRunningFuture: true
+        timeoutDuration: 5s
+    instances:
+      authorizationTimeLimit:
+        baseConfig: default
+        timeoutDuration: 5s
+
+logging:
+  level:
+    root: INFO
+    com.example: DEBUG
+    io.github.resilience4j: DEBUG

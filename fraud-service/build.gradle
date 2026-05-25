@@ -1,0 +1,28 @@
+plugins {
+    id 'org.springframework.boot'
+    id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+dependencies {
+    // Import Spring Boot BOM so starters resolve to the correct versions
+    implementation platform('org.springframework.boot:spring-boot-dependencies:3.1.2')
+    implementation project(':common')
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-kafka'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.0.0'
+    implementation 'org.springframework.cloud:spring-cloud-starter-config:4.0.0'
+    implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:3.0.0'
+    implementation 'io.github.resilience4j:resilience4j-core:2.0.2'
+    implementation 'io.github.resilience4j:resilience4j-circuitbreaker:2.0.2'
+    implementation 'io.github.resilience4j:resilience4j-retry:2.0.2'
+    implementation 'io.github.resilience4j:resilience4j-timelimiter:2.0.2'
+    implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.0.2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

@@ -10,6 +10,12 @@ spring:
         locator:
           enabled: true
       routes:
+        - id: payment-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/payment-service/**
+          filters:
+            - StripPrefix=1
         - id: auth-service
           uri: http://localhost:8081
           predicates:
@@ -20,6 +26,24 @@ spring:
           uri: http://localhost:8082
           predicates:
             - Path=/card-service/**
+          filters:
+            - StripPrefix=1
+        - id: fraud-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/fraud-service/**
+          filters:
+            - StripPrefix=1
+        - id: notification-service
+          uri: http://localhost:8086
+          predicates:
+            - Path=/notification-service/**
+          filters:
+            - StripPrefix=1
+        - id: audit-service
+          uri: http://localhost:8087
+          predicates:
+            - Path=/audit-service/**
           filters:
             - StripPrefix=1
         - id: loan-service
