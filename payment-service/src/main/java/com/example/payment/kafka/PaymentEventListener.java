@@ -16,7 +16,7 @@ public class PaymentEventListener {
         this.paymentService = paymentService;
     }
 
-    @KafkaListener(topics = "fraud-check-completed", groupId = "payment-service")
+    @KafkaListener(topics = "payment-events", groupId = "payment-service")
     @CircuitBreaker(name = "fraudCheckCircuitBreaker", fallbackMethod = "fraudCheckCompletedFallback")
     @Retry(name = "fraudCheckRetry")
     public void onFraudCheckCompleted(PaymentEvents.FraudCheckCompleted event) {
@@ -30,7 +30,7 @@ public class PaymentEventListener {
         }
     }
 
-    @KafkaListener(topics = "payment-authorized", groupId = "payment-service")
+    @KafkaListener(topics = "payment-events", groupId = "payment-service")
     @CircuitBreaker(name = "authorizationCircuitBreaker", fallbackMethod = "paymentAuthorizedFallback")
     @Retry(name = "authorizationRetry")
     public void onPaymentAuthorized(PaymentEvents.PaymentAuthorized event) {
@@ -44,7 +44,7 @@ public class PaymentEventListener {
         }
     }
 
-    @KafkaListener(topics = "payment-settled", groupId = "payment-service")
+    @KafkaListener(topics = "payment-events", groupId = "payment-service")
     @CircuitBreaker(name = "settlementCircuitBreaker", fallbackMethod = "paymentSettledFallback")
     @Retry(name = "settlementRetry")
     public void onPaymentSettled(PaymentEvents.PaymentSettled event) {

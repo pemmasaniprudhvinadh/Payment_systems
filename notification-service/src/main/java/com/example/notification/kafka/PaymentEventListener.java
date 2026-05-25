@@ -50,7 +50,7 @@ public class PaymentEventListener {
     /**
      * Listen for payment authorized events and send notifications
      */
-    @KafkaListener(topics = "payment-events", groupId = "notification-service", filter = "paymentAuthorizedFilter")
+    @KafkaListener(topics = "payment-events", groupId = "notification-service")
     @CircuitBreaker(name = "notificationCircuitBreaker", fallbackMethod = "notificationFallback")
     @Retry(name = "notificationRetry")
     public void onPaymentAuthorized(PaymentEvents.PaymentAuthorized event) {
@@ -70,7 +70,7 @@ public class PaymentEventListener {
     /**
      * Listen for payment settled events and send notifications
      */
-    @KafkaListener(topics = "payment-events", groupId = "notification-service", filter = "paymentSettledFilter")
+    @KafkaListener(topics = "payment-events", groupId = "notification-service")
     @CircuitBreaker(name = "notificationCircuitBreaker", fallbackMethod = "notificationFallback")
     @Retry(name = "notificationRetry")
     public void onPaymentSettled(PaymentEvents.PaymentSettled event) {

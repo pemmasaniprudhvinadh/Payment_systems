@@ -22,7 +22,7 @@ public class PaymentAuthorizationListener {
     /**
      * Listen for fraud check completed events and authorize the payment if not fraudulent
      */
-    @KafkaListener(topics = "fraud-check-completed", groupId = "auth-service")
+    @KafkaListener(topics = "payment-events", groupId = "auth-service")
     @CircuitBreaker(name = "authorizationCircuitBreaker", fallbackMethod = "authorizationFallback")
     @Retry(name = "authorizationRetry")
     public void onFraudCheckCompleted(PaymentEvents.FraudCheckCompleted event) {
@@ -77,7 +77,7 @@ public class PaymentAuthorizationListener {
                 authCode,
                 reason
             );
-            kafkaTemplate.send("payment-authorized", paymentId, authEvent).get();
+            kafkaTemplate.send("payment-events", paymentId, authEvent).get();
             System.out.println("PaymentAuthorized event published for paymentId: " + paymentId);
         } catch (Exception e) {
             System.err.println("Failed to publish authorization result: " + e.getMessage());
@@ -100,7 +100,7 @@ public class PaymentAuthorizationListener {
                 "AUTH_DEFAULT",
                 "Authorization service temporarily unavailable - defaulting to authorize"
             );
-            kafkaTemplate.send("payment-authorized", event.paymentId, authEvent).get();
+            kafkaTemplate.send("payment-events", event.paymentId, authEvent).get();
             System.out.println("Published fallback authorization result for paymentId: " + event.paymentId);
         } catch (Exception ex) {
             System.err.println("Failed to publish fallback authorization result: " + ex.getMessage());

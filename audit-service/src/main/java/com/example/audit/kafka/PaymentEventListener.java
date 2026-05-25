@@ -20,7 +20,7 @@ public class PaymentEventListener {
     /**
      * Listen for payment requested events and log to audit trail
      */
-    @KafkaListener(topics = "payment-events", groupId = "audit-service", filter = "paymentRequestedFilter")
+    @KafkaListener(topics = "payment-events", groupId = "audit-service")
     @CircuitBreaker(name = "auditCircuitBreaker", fallbackMethod = "auditFallback")
     @Retry(name = "auditRetry")
     public void onPaymentRequested(PaymentEvents.PaymentRequested event) {
@@ -46,7 +46,7 @@ public class PaymentEventListener {
     /**
      * Listen for fraud check completed events and log to audit trail
      */
-    @KafkaListener(topics = "payment-events", groupId = "audit-service", filter = "fraudCheckCompletedFilter")
+    @KafkaListener(topics = "payment-events", groupId = "audit-service")
     @CircuitBreaker(name = "auditCircuitBreaker", fallbackMethod = "auditFallback")
     @Retry(name = "auditRetry")
     public void onFraudCheckCompleted(PaymentEvents.FraudCheckCompleted event) {
@@ -72,7 +72,7 @@ public class PaymentEventListener {
     /**
      * Listen for payment authorized events and log to audit trail
      */
-    @KafkaListener(topics = "payment-events", groupId = "audit-service", filter = "paymentAuthorizedFilter")
+    @KafkaListener(topics = "payment-events", groupId = "audit-service")
     @CircuitBreaker(name = "auditCircuitBreaker", fallbackMethod = "auditFallback")
     @Retry(name = "auditRetry")
     public void onPaymentAuthorized(PaymentEvents.PaymentAuthorized event) {
@@ -98,7 +98,7 @@ public class PaymentEventListener {
     /**
      * Listen for payment settled events and log to audit trail
      */
-    @KafkaListener(topics = "payment-events", groupId = "audit-service", filter = "paymentSettledFilter")
+    @KafkaListener(topics = "payment-events", groupId = "audit-service")
     @CircuitBreaker(name = "auditCircuitBreaker", fallbackMethod = "auditFallback")
     @Retry(name = "auditRetry")
     public void onPaymentSettled(PaymentEvents.PaymentSettled event) {

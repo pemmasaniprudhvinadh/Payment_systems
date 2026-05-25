@@ -19,7 +19,7 @@ public class PaymentRequestListener {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    @KafkaListener(topics = "payment-requested", groupId = "fraud-service")
+    @KafkaListener(topics = "payment-events", groupId = "fraud-service")
     @CircuitBreaker(name = "fraudAnalysisCircuitBreaker", fallbackMethod = "fraudAnalysisFallback")
     @Retry(name = "fraudAnalysisRetry")
     public void onPaymentRequested(PaymentEvents.PaymentRequested event) {
@@ -59,7 +59,7 @@ public class PaymentRequestListener {
                 analysis.reason,
                 analysis.riskScore
             );
-            kafkaTemplate.send("fraud-check-completed", paymentId, fraudEvent).get();
+            kafkaTemplate.send("payment-events", paymentId, fraudEvent).get();
             System.out.println("FraudCheckCompleted event published for paymentId: " + paymentId);
         } catch (Exception e) {
             System.err.println("Failed to publish fraud check result: " + e.getMessage());
@@ -82,7 +82,7 @@ public class PaymentRequestListener {
                 "Fraud service temporarily unavailable - defaulting to pass",
                 0.0
             );
-            kafkaTemplate.send("fraud-check-completed", event.paymentId, fraudEvent).get();
+            kafkaTemplate.send("payment-events", event.paymentId, fraudEvent).get();
             System.out.println("Published fallback fraud check result for paymentId: " + event.paymentId);
         } catch (Exception ex) {
             System.err.println("Failed to publish fallback fraud check result: " + ex.getMessage());

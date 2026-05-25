@@ -94,7 +94,7 @@ public class PaymentService {
             PaymentEvents.PaymentRequested event = new PaymentEvents.PaymentRequested(
                 paymentId, idempotencyKey, userId, tokenizedCardId, amount, currency, merchantId
             );
-            kafkaTemplate.send("payment-requested", paymentId, event).get();
+            kafkaTemplate.send("payment-events", paymentId, event).get();
             System.out.println("PaymentRequested event published for paymentId: " + paymentId);
         } catch (Exception e) {
             System.err.println("Failed to publish PaymentRequested event: " + e.getMessage());

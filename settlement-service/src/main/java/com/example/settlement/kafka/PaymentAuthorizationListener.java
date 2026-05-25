@@ -19,7 +19,7 @@ public class PaymentAuthorizationListener {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    @KafkaListener(topics = "payment-authorized", groupId = "settlement-service")
+    @KafkaListener(topics = "payment-events", groupId = "settlement-service")
     @CircuitBreaker(name = "settlementProcessingCircuitBreaker", fallbackMethod = "settlementProcessingFallback")
     @Retry(name = "settlementProcessingRetry")
     public void onPaymentAuthorized(PaymentEvents.PaymentAuthorized event) {
@@ -91,7 +91,7 @@ public class PaymentAuthorizationListener {
                 status,
                 transactionId
             );
-            kafkaTemplate.send("payment-settled", paymentId, settledEvent).get();
+            kafkaTemplate.send("payment-events", paymentId, settledEvent).get();
             System.out.println("PaymentSettled event published for paymentId: " + paymentId);
         } catch (Exception e) {
             System.err.println("Failed to publish settlement result: " + e.getMessage());
