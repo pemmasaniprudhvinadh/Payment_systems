@@ -53,7 +53,7 @@ spring:
           filters:
             - StripPrefix=1
 
-# Dynamic routes configuration with load balancing
+# Dynamic routes configuration with load balancing and security
 gateway:
   routes:
     - id: payment-service-lb
@@ -129,14 +129,12 @@ management:
       exposure:
         include: health,info
 
-# Security configuration
-gateway:
   security:
     jwt:
       secret: mySecretKeyForJWTTokenValidationAndCreationPurposes
-      expiration: 86400000  # 24 hours in milliseconds
+      expiration: 86400000 # 24 hours in milliseconds
       enabled: true
-    
+
     # Public paths that do not require authentication
     public-paths:
       - /api/security/login
@@ -145,43 +143,43 @@ gateway:
       - /api/routes/health
       - /api/eureka/status
       - /actuator/health
-    
+
     # Per-route security rules (path patterns to required roles)
     route-security:
       - path: /payment-service/
         roles:
           - PAYMENT_USER
           - ADMIN
-      
+
       - path: /card-service/
         roles:
           - CARD_USER
           - ADMIN
-      
+
       - path: /auth-service/
         roles:
           - AUTH_USER
           - ADMIN
-      
+
       - path: /fraud-service/
         roles:
           - FRAUD_ANALYST
           - ADMIN
-      
+
       - path: /api/routes
         roles:
           - ADMIN
           - GATEWAY_ADMIN
-      
+
       - path: /api/eureka
         roles:
           - ADMIN
           - GATEWAY_ADMIN
-      
+
       - path: /api/security
         roles:
           - ADMIN
-    
+
     # API Key configuration (optional, disabled by default)
     api-key:
       enabled: false
