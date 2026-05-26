@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
         body.put("message", ex.getMessage());
         body.put("path", req.getRequestURI());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
-    }y
+    }
 
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<Map<String, Object>> handleDataError(DataAccessException ex, HttpServletRequest req) {
